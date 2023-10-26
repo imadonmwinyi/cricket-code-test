@@ -11,10 +11,7 @@ function Header(){
     const handleDownloadCsv = async (e) =>{
         e.preventDefault();
         const posts = await downLoadCsv()
-        
-        const csvJson = JSON.parse(JSON.stringify(posts))
-        console.log(csvJson)
-        const csv = csvmaker(csvJson)
+        const csv = csvmaker(posts)
         const url = window.URL.createObjectURL(new Blob([csv], { type: 'text/csv' })) 
         const link = document.createElement('a')
         link.href = url
@@ -28,11 +25,12 @@ function Header(){
     const csvmaker = function (data) { 
   
         const csvRows = []; 
-        const headers = Object.keys(data); 
+        const headers = Object.keys(data[0]);
         csvRows.push(headers.join(',')); 
-        for (const row of data) { 
+        for(let i = 0; i< data.length; i++){ 
+            
             const values = headers.map(e => { 
-                return row[e] 
+                return data[i][e] 
             }) 
             csvRows.push(values.join(',')) 
         } 
